@@ -49,6 +49,8 @@ async function _registerPushToken({
     ageRestricted?: boolean
   }
 }) {
+  // Dietsky does not have APNs delivery configured with the Bluesky service.
+  if (Platform.OS === 'ios') return
   try {
     const payload: app.bsky.notification.registerPush.$InputBody = {
       serviceDid: currentAccount.service?.includes('staging')
@@ -345,7 +347,7 @@ export async function resetBadgeCount() {
 }
 
 export async function unregisterPushToken(clients: TemporaryPushClient[]) {
-  if (!IS_NATIVE) return
+  if (!IS_NATIVE || Platform.OS === 'ios') return
 
   try {
     const token = await getPushToken()

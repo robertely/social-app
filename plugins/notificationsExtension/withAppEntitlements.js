@@ -3,7 +3,7 @@ const {withEntitlementsPlist} = require('expo/config-plugins')
 const withAppEntitlements = config => {
   return withEntitlementsPlist(config, async config => {
     config.modResults['com.apple.security.application-groups'] = [
-      `group.app.bsky`,
+      `group.com.robertely.dietsky.poc`,
     ]
     return config
   })

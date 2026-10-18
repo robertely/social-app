@@ -91,7 +91,8 @@ module.exports = function (api) {
       ],
     ],
     plugins: [
-      '@lingui/babel-plugin-lingui-macro',
+      // Keep source-message fallbacks until nightly catalogs include POC strings.
+      ['@lingui/babel-plugin-lingui-macro', {stripMessageField: false}],
       ['babel-plugin-react-compiler', {target: '19'}],
       [
         'module-resolver',

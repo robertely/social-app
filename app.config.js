@@ -32,13 +32,8 @@ module.exports = function (_config) {
     ...(IS_DEV || IS_TESTFLIGHT ? [] : []),
   ]
 
-  /*
-   * EXPO_PUBLIC_ENV is also an EAS environment secret, which wins over a build
-   * profile's env, so profiles opt out of OTA updates with their own flag. A
-   * dev client with updates on rejects unsigned manifests from a local Metro.
-   */
-  const UPDATES_ENABLED =
-    (IS_TESTFLIGHT || IS_PRODUCTION) && !process.env.DISABLE_UPDATES
+  /** Dietsky test builds always run their embedded JavaScript bundle. */
+  const UPDATES_ENABLED = false
 
   const USE_SENTRY = Boolean(process.env.SENTRY_AUTH_TOKEN)
 
@@ -57,7 +52,8 @@ module.exports = function (_config) {
       primaryColor: '#006AFF',
       ios: {
         supportsTablet: false,
-        bundleIdentifier: 'xyz.blueskyweb.app',
+        bundleIdentifier: 'com.robertely.dietsky',
+        buildNumber: '1',
         appleTeamId: process.env.EXPO_APPLE_TEAM_ID,
         config: {
           usesNonExemptEncryption: false,
@@ -125,7 +121,8 @@ module.exports = function (_config) {
         entitlements: {
           'com.apple.developer.kernel.increased-memory-limit': true,
           'com.apple.developer.kernel.extended-virtual-addressing': true,
-          'com.apple.security.application-groups': 'group.app.bsky',
+          'com.apple.security.application-groups':
+            'group.com.robertely.dietsky.poc',
           'com.apple.developer.usernotifications.communication': true,
           // 'com.apple.developer.device-information.user-assigned-device-name': true,
           'com.apple.developer.declared-age-range': true,
@@ -475,32 +472,32 @@ module.exports = function (_config) {
                 appExtensions: [
                   {
                     targetName: 'Share-with-Bluesky',
-                    bundleIdentifier: 'xyz.blueskyweb.app.Share-with-Bluesky',
+                    bundleIdentifier: 'com.robertely.dietsky.share',
                     entitlements: {
                       'com.apple.security.application-groups': [
-                        'group.app.bsky',
+                        'group.com.robertely.dietsky.poc',
                       ],
                     },
                   },
                   {
                     targetName: 'BlueskyNSE',
-                    bundleIdentifier: 'xyz.blueskyweb.app.BlueskyNSE',
+                    bundleIdentifier: 'com.robertely.dietsky.notifications',
                     entitlements: {
                       'com.apple.security.application-groups': [
-                        'group.app.bsky',
+                        'group.com.robertely.dietsky.poc',
                       ],
                     },
                   },
                   {
                     targetName: 'BlueskyClip',
-                    bundleIdentifier: 'xyz.blueskyweb.app.AppClip',
-                    parentBundleIdentifier: 'xyz.blueskyweb.app',
+                    bundleIdentifier: 'com.robertely.dietsky.AppClip',
+                    parentBundleIdentifier: 'com.robertely.dietsky',
                     entitlements: {
                       'com.apple.security.application-groups': [
-                        'group.app.bsky',
+                        'group.com.robertely.dietsky.poc',
                       ],
                       'com.apple.developer.parent-application-identifiers': [
-                        '$(AppIdentifierPrefix)xyz.blueskyweb.app',
+                        '$(AppIdentifierPrefix)com.robertely.dietsky',
                       ],
                       'com.apple.developer.associated-domains':
                         ASSOCIATED_DOMAINS,
