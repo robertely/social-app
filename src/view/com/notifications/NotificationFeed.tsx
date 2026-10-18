@@ -179,8 +179,12 @@ export function NotificationFeed({
   }, [showMoreEnabled, isFetching, hasNextPage, isError, fetchNextPage])
 
   const onPressRetryLoadMore = useCallback(() => {
-    void fetchNextPage()
-  }, [fetchNextPage])
+    if (showMoreEnabled) {
+      void onPressShowMore()
+    } else {
+      void fetchNextPage()
+    }
+  }, [showMoreEnabled, onPressShowMore, fetchNextPage])
 
   const renderItem = useCallback(
     ({item, index}: ListRenderItemInfo<NotificationFeedListItem>) => {

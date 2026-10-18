@@ -1156,8 +1156,12 @@ let PostFeed = ({
   }, [refreshToTop, onHasNew])
 
   const onPressRetryLoadMore = useCallback(() => {
-    void fetchNextPage()
-  }, [fetchNextPage])
+    if (showMoreEnabled) {
+      void onPressShowMore()
+    } else {
+      void fetchNextPage()
+    }
+  }, [showMoreEnabled, onPressShowMore, fetchNextPage])
 
   // rendering
   // =

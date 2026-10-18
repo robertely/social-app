@@ -88,15 +88,25 @@ export function useIncrementalList<TData, TSlice extends IncrementalSlice>({
       setLoadingScope(scope)
 
       const reveal = (nextSlices: TSlice[], wanted: number) => {
-        const end = endForPostCount(nextSlices, wanted, getItemCount)
-        const count = Math.max(
-          batchSize,
-          countPosts(nextSlices.slice(0, end), getItemCount),
-        )
-        const endKey = end ? sliceKey(nextSlices[end - 1]) : ''
-        setWindow(current =>
-          current.scope === scope ? {scope, count, endKey} : current,
-        )
+        setWindow(current => {
+          if (current.scope !== scope) return current
+          /* Prepends can arrive while this request is still loading. */
+          const previousEnd = current.endKey
+            ? nextSlices.findIndex(
+                slice => sliceKey(slice) === current.endKey,
+              ) + 1
+            : 0
+          const end = Math.max(
+            endForPostCount(nextSlices, wanted, getItemCount),
+            previousEnd,
+          )
+          const count = Math.max(
+            batchSize,
+            countPosts(nextSlices.slice(0, end), getItemCount),
+          )
+          const endKey = end ? sliceKey(nextSlices[end - 1]) : ''
+          return {scope, count, endKey}
+        })
       }
 
       /* Reveal buffered content immediately, even if the batch needs a fetch. */

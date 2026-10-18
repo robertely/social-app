@@ -262,6 +262,24 @@ describe('useIncrementalList', () => {
     expect(hook.result.current.visibleSlices).toHaveLength(6)
   })
 
+  it('keeps previously revealed posts when prepends arrive during a load', async () => {
+    const pending = deferred()
+    const fetchNextPage = jest.fn(() => pending.promise)
+    const original = slices(4)
+    const hook = render({slices: original, hasNextPage: true, fetchNextPage})
+    let loading!: Promise<void>
+    act(() => {
+      loading = hook.result.current.onPressShowMore()
+    })
+    const prepended = [...slices(5, 'new'), ...original]
+    hook.rerender({slices: prepended, hasNextPage: true, fetchNextPage})
+    await act(async () => {
+      pending.resolve({isError: false, hasNextPage: false, data: prepended})
+      await loading
+    })
+    expect(hook.result.current.visibleSlices).toEqual(prepended)
+  })
+
   it.each(['identity', 'refresh', 'inactive', 'unmount'])(
     'ignores an in-flight response after %s',
     async change => {
