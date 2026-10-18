@@ -58,7 +58,10 @@ module.exports = function (_config) {
         config: {
           usesNonExemptEncryption: false,
         },
-        icon: './assets/app-icons/ios_icon_dietsky.png',
+        icon: {
+          light: './assets/app-icons/ios_icon_dietsky.png',
+          dark: './assets/app-icons/ios_icon_dietsky_dark.png',
+        },
         infoPlist: {
           CFBundleDisplayName: 'Dietsky',
           CADisableMinimumFrameDurationOnPhone: true,
