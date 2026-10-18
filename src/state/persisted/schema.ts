@@ -191,7 +191,7 @@ export const defaults: Schema = {
   subtitlesEnabled: true,
   trendingDisabled: false,
   trendingVideoDisabled: false,
-  feedShowMoreEnabled: false,
+  feedShowMoreEnabled: true,
   feedShowMoreBatchSize: 30,
 }
 
